@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+	
+	<class name="Category" table="MYBLOG_CATEGORY" dynamic-update="true">
+		<cache usage="read-write" include="all"/>	
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		
+		<property name="name" not-null="true" length="100"/>
+		<property name="description" length="1000"/>
+		<property name="order" column="myOrder"/>
+		<property name="defaultCategory" type="boolean" not-null="true"/>
+		<property name="createTime" type="timestamp" not-null="true"/>
+		<property name="secret" type="boolean" not-null="true"/>
+		<property name="URLName" type="string" length="100"/>
+		<property name="count" column="`count`"/>
+		<many-to-one name="parent" class="Category"/>
+		
+		<set name="children" inverse="true" cascade="all" lazy="true">
+			<key column="parent"/>
+			<one-to-many class="Category"/>	
+		</set>
+	</class>
+	
+	<!-- 
+	<query name="Category.by.order">
+		<![CDATA[
+			from Category as category 
+			order by category.order]]>
+	</query>
+	
+	<query name="Category.by.createTime">
+		<![CDATA[
+		from Category as category
+		order by category.createTime
+		]]>
+	</query>
+	
+	<query name="find.by.categoryName">
+		<![CDATA[
+			from Category as category
+			where category.name=:categoryName
+		]]>
+	</query>
+	 -->
+</hibernate-mapping>

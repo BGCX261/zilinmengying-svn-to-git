@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+    <class name="Tag" table="MYBLOG_TAG" dynamic-update="true">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		
+		<property name="name" type="string" not-null="true" length="130"/>
+		<property name="URLName" type="string" length="130"/>
+		<property name="count" column="`count`"/>
+		
+    </class>
+    
+</hibernate-mapping>

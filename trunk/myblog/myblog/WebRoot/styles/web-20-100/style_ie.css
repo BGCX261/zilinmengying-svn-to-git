@@ -1,0 +1,20 @@
+/* Fixes for Internet Explorer */
+
+#wp-menu-main ol li.first {
+	margin-left: 1em;
+	}
+
+#wp-content {
+	height: auto;
+	min-height: 5em;
+	}
+
+#wp-content-pri {
+	float: left;
+	margin-left: 0.5em;
+	width: 65%;
+	}
+
+#wp-footer p {
+	margin: -1em 0 0;
+	}

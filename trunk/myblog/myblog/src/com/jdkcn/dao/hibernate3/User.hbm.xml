@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+    <class name="User" table="MYBLOG_USER">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		
+		<property name="username" not-null="true" length="50"/>
+		<property name="nickname" not-null="true" length="100"/>
+		<property name="password" not-null="true" length="40"/>
+		<property name="gender" />
+		<property name="age" />
+		<property name="mail" not-null="true" length="50" />
+		<property name="birthday" />
+		<property name="qq"/>
+		<property name="msn" length="50"/>
+		<property name="gmail" length="50"/>
+		<property name="icq"/>
+		<property name="site" length="300"/>
+		
+		<!-- A many-to-many association modelled using
+			a composite-element mapping (this lets us 
+			keep track of the time of creation for the
+			link. We use an <idbag>, since that gives
+			us a nice surrogate key. -->
+		<idbag name="userRoles"	lazy="true"	table="MYBLOG_USER_ROLE" cascade="save-update">
+			<!-- the surrogate primary key -->
+			<collection-id column="user_role_id"
+				type="long">
+				<generator class="increment"/>
+			</collection-id>
+			<!-- the foreign key of the User -->
+			<key column="userId"/>
+			<!-- a composite-element holding the
+				associated Role and User, and the 
+				creation time of the link -->
+			<composite-element class="UserRole">
+				<!-- for convenience, a backpointer 
+					to the User -->
+				<parent name="user"/>
+				<!-- the foreign key of the Role -->
+				<many-to-one name="role" cascade="save-update" outer-join="false" column="roleId"/>
+			    <!-- since Roles are cached, disable 
+			    	outerjoining! -->
+			</composite-element>
+		</idbag>
+		
+		<bag name="roles" lazy="true" table="MYBLOG_USER_ROLE" inverse="true" cascade="save-update" batch-size="9">
+			<!-- we access this collection often,
+				so cache it. -->
+			<cache usage="read-write"/>
+			<!-- the foreign key of the User -->
+			<key column="userId"/>
+			<!-- the foreign key of the Role -->
+			<many-to-many column="roleId" class="Role" outer-join="false"/>
+			<!-- since Roles are cached, disable 
+				outerjoining! -->
+		</bag>
+		
+    </class>
+</hibernate-mapping>

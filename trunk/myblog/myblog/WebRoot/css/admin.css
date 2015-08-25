@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+#menu{
+	float: left;
+}
+
+#content{
+	border: solid 1px green;
+}
+
+#about{
+	color: green;
+}

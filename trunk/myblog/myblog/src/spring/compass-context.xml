@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <!-- COMPASS START -->
+    <bean id="compass" class="org.compass.spring.LocalCompassBean">
+        <property name="resourceDirectoryLocations">
+            <list>
+                <value>classpath:com/jdkcn/compass</value>
+            </list>
+        </property>
+        <property name="connection">
+            <value>/lucene/indexes</value>
+        </property>
+        <property name="compassSettings">
+            <props>
+                <prop key="compass.transaction.factory">
+                    org.compass.spring.transaction.SpringSyncTransactionFactory
+                </prop>
+                <prop key="compass.engine.highlighter.default.formatter.simple.pre">
+					<![CDATA[<span class="highlight">]]>
+				</prop>
+				<prop key="compass.engine.highlighter.default.formatter.simple.post">
+					<![CDATA[</span>]]>
+				</prop>
+            </props>
+        </property>
+        <property name="transactionManager">
+            <ref bean="transactionManager" />
+        </property>
+        <property name="convertersByName">
+        	<map>
+        		<entry key="htmlPropertyConverter">
+        			<bean class="com.jdkcn.compass.HtmlPropertyConverter"/>
+        		</entry>
+        	</map>
+        </property>
+    </bean>
+    
+    <bean id="hibernateGpsDevice" class="org.compass.spring.device.hibernate.SpringHibernate3GpsDevice">
+        <property name="name">
+            <value>hibernateDevice</value>
+        </property>
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+    
+    <bean id="compassGps" class="org.compass.gps.impl.SingleCompassGps" init-method="start" destroy-method="stop">
+        <property name="compass">
+            <ref bean="compass" />
+        </property>
+        <property name="gpsDevices">
+            <list>
+                <bean
+                    class="org.compass.spring.device.SpringSyncTransactionGpsDeviceWrapper">
+                    <property name="gpsDevice" ref="hibernateGpsDevice" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <!-- COMPASS END -->
+</beans>

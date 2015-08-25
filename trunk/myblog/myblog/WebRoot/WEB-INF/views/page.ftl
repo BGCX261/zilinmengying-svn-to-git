@@ -1,0 +1,1 @@
+<#include siteConfig.theme + "/page.ftl"/>

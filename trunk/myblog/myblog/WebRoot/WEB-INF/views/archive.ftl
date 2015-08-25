@@ -1,0 +1,1 @@
+<#include siteConfig.theme + "/archive.ftl"/>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+	<class name="Comment" table="MYBLOG_COMMENT" dynamic-update="true">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		<property name="authorName" type="string" not-null="true" length="50"/>
+		<property name="authorSite" type="string" length="300"/>
+		<property name="authorMail" type="string" length="50"/>
+		<property name="content" type="text" not-null="true"/>
+		<property name="postTime" not-null="true"/>
+		<property name="postIP" type="string" not-null="true" length="15"/>
+		<property name="isSubscribe"/>
+        <property name="status" type="string" length="20"/>
+        <property name="type" type="string" length="10"/>
+        <property name="agent" type="string" length="255"/>
+		<many-to-one name="entry" class="com.jdkcn.domain.Entry"
+			cascade="none" outer-join="auto" column="entryId" not-null="true"/>
+	</class>
+    
+</hibernate-mapping>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="true">
+
+    <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="location">
+                <value>classpath:config.properties</value>
+      </property>
+    </bean>
+    
+    <bean id="exceptionResolver" 
+        class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.dao.DataAccessException">        
+                    dataAccessFailure
+                </prop>
+            </props>
+        </property>
+    </bean>
+    
+	<!--
+	  - The message source for this context, loaded from localized "messages_xx" files
+	  - in the classpath, i.e. "/WEB-INF/classes/messages.properties" or
+	  - "/WEB-INF/classes/messages_fr.properties".
+	  -
+	  - "getMessage" calls to this context will use this source.
+	  - Child contexts can have their own message sources, inheriting all messages from this
+	  - source, being able to define new messages and override ones defined in this source.
+	  -
+	  - We have no need for application messages in this tiny application, so this
+		- definition will simply be used by the next level (countries-servlet.xml).
+	  -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">	
+		<property name="basename" value="com.jdkcn.messages"/>
+	</bean>
+	
+	<!--
+	  - We specify here that Locale and theme are stored in cookies.
+	  - They could be stored in a Session. Default resolvers don't allow changing them on the fly.
+	  -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="l"/>
+    </bean>
+    
+    <bean id="requestCounterInterceptor" class="com.jdkcn.web.interceptor.RequestCounterInterceptor">
+    	<property name="blogFacade" ref="blogFacade"/>
+    </bean>
+    
+    <bean id="noCacheHeaderINterceptor" class="com.jdkcn.web.interceptor.NoCacheHeaderInterceptor"/>
+	
+	<bean id="commonModelInterceptor" class="com.jdkcn.web.interceptor.CommonModelInterceptor">
+		<property name="blogFacade" ref="blogFacade"/>
+	</bean>
+	
+	<!-- Configurer that sets up a shared FreeMarker Configuration for FreeMarker views -->
+	<bean id="freemarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="WEB-INF/views/"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="number_format">0.##########</prop>
+            </props>
+        </property>
+	</bean>
+
+	<!-- Simple ViewResolver for FreeMarker, appending ".ftl" to logical view names. -->
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="cache" value="${view.cache}"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="requestContextAttribute" value="rc"/>
+		<property name="suffix" value=".ftl"/>
+		<property name="contentType" value="text/html; charset=UTF-8"/>
+	</bean>
+    
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="localeChangeInterceptor"/>
+				<ref bean="commonModelInterceptor"/>
+                <ref bean="noCacheHeaderINterceptor"/>
+                <!-- 
+                <ref local="requestCounterInterceptor"/>
+                 -->
+			</list>
+		</property>
+		<property name="mappings">
+			<props>
+				<prop key="/index.jhtml">indexController</prop>
+				<prop key="/entry.jhtml">entryController</prop>
+				<prop key="/category.jhtml">categoryController</prop>
+				<prop key="/postComment.jhtml">postCommentController</prop>
+				<prop key="/tag.jhtml">tagController</prop>
+				<prop key="/tags.jhtml">tagController</prop>
+				<prop key="/links.jhtml">showLinksController</prop>
+                <prop key="/search.jhtml">searchController</prop>
+                <prop key="/page.jhtml">pageController</prop>
+                <prop key="/metaWeblogXmlrpc.jhtml">xmlRpcHandler</prop>
+                <prop key="/unsubscribe.jhtml">unsubscribeController</prop>
+                <prop key="/archive.jhtml">archiveController</prop>
+                <prop key="/404.jhtml">filenameController</prop>
+			</props>
+		</property>
+	</bean>
+    
+	<bean id="filenameController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+    
+    <bean id="baseController" class="com.jdkcn.web.BaseController" abstract="true">
+        <property name="blogFacade" ref="blogFacade"/>
+        <property name="indexView" value="redirect:index.jhtml"/>
+    </bean>
+    
+    <bean id="archiveController" class="com.jdkcn.web.ArchiveController" parent="baseController">
+    	<property name="successView" value="archive"/>
+    </bean>
+    
+    <bean id="unsubscribeController" class="com.jdkcn.web.UnsubscribeController" parent="baseController">
+    	<property name="successView" value="unsubscribe"/>
+    </bean>
+    
+    <bean id="pageController" class="com.jdkcn.web.PageController" parent="baseController">
+    	<property name="successView" value="page"/>
+    </bean>
+            
+    <bean id="showLinksController" class="com.jdkcn.web.ListLinkController" parent="baseController">
+        <property name="successView" value="links"/>
+    </bean>
+    	
+	<bean id="indexController" class="com.jdkcn.web.IndexController">
+		<property name="blogFacade" ref="blogFacade"/>
+		<property name="successView" value="index"/>
+	</bean>
+		
+	<bean id="entryController" class="com.jdkcn.web.EntryController">
+		<property name="blogFacade" ref="blogFacade"/>
+		<property name="successView" value="entry"/>
+	</bean>
+	
+	<bean id="categoryController" class="com.jdkcn.web.CategoryController">
+		<property name="blogFacade" ref="blogFacade"/>
+		<property name="successView" value="category"/>
+	</bean>
+	
+	<bean id="postCommentController" class="com.jdkcn.web.PostCommentController">
+		<property name="blogFacade" ref="blogFacade"/>
+		<property name="formView" value="entry"/>
+		<property name="successView" value="redirect:entry.jhtml#comments"/>
+	</bean>
+	
+	<bean id="tagController" class="com.jdkcn.web.TagController">
+		<property name="blogFacade" ref="blogFacade"/>
+		<property name="successView" value="tag"/>
+		<property name="tagsView" value="tags"/>
+	</bean>
+	
+    <!-- 
+    <bean id="searchController" class="org.compass.spring.web.mvc.CompassSearchController">
+        <property name="compass"><ref bean="compass"/></property>
+        <property name="searchView"><value>search</value></property>
+        <property name="searchResultsView"><value>search</value></property>
+        <property name="pageSize"><value>10</value></property>
+    </bean>
+     -->
+    <bean id="advanceCompassSearchHelper" class="com.jdkcn.compass.AdvanceCompassSearchHelper">
+    	<property name="highlightFields">
+    		<list>
+    			<value>content</value>
+    		</list>
+    	</property>
+    	<property name="pageSize"><value>10</value></property>
+    	<constructor-arg ref="compass"/>
+    </bean>
+     
+    <bean id="searchController" class="com.jdkcn.web.SearchController" parent="baseController">
+        <property name="compass"><ref bean="compass"/></property>
+        <property name="searchView"><value>search</value></property>
+        <property name="searchResultsView"><value>search</value></property>
+        <property name="pageSize"><value>10</value></property>
+        <property name="searchHelper"><ref local="advanceCompassSearchHelper"/></property>
+    </bean>
+    
+</beans>

@@ -1,0 +1,272 @@
+Date:2005-12-04
+	author:somebody
+	
+	1.把原来的userManager分离成userDao 和现在的userManager
+	2.实现Blog Quote的hibernate自定义类型
+	3.所有领域模型都实现序列化
+
+Date:2005-12-05
+	author:somebody
+	1.修改昨天的数据库初始化bug。主要是blog的content的text字段造成的。
+	  原来是这样写的：		
+	        <property name="content" type="string">
+				<column name="content" length="16" sql-type="longtext" not-null="true"/>
+			</property>
+	  现在改成这样就可以了：
+	     	<property name="content" type="org.hibernate.type.TextType"/>
+	  用原来的那种定义只能在SQL Server上面通过,现在都可以通过了.
+	  
+Date:2005-12-09
+	author:somebody
+	1.修改需求文档
+	2.修改ant部署build.xml,现在可以正确发布了.ant all 就可以生成一个war了.
+	  [
+	    note:如果把class全部打包成一个jar，spring的配置文件需要改动
+	    原来spring配置hibernate的映射文件时这样的：
+	    <property name="mappingDirectoryLocations">
+				<list>
+					<value>classpath:cn/jdk/leaf/domain</value>
+				</list>
+		</property>
+		打包成jar之后需要改成:
+		<property name="mappingJarLocations">
+			<list>
+				<value>WEB-INF/lib/myblog-1.0.jar</value>
+			</list>
+		</property>	
+	   ]
+ Date:2005-12-13
+	 author:somebody
+	 1.修改需求文档
+ 
+ Date:2005-12-23
+ 	 author:somebody
+ 	 1.升级webwork到2.2
+ 	 2.升级dwr到1.1b2
+ 	 
+ Date:2005-12-27
+ 	 author:somebody
+     1.bug fix,alf发现的bug引用类型不能为空修改QuoteType的deepCopy()方法如果为null，直接返回null就可以了
+     
+ Date:2005-12-29
+ 	 author:somebody
+ 	 1.bug fix,修改LoginActionTest可以运行，解决认证码的问题，测试的时候put随便一个认证码就可以了。呵呵。
+ 
+ Date:2005-12-31
+ 	 author:somebody
+ 	 1.添加lucene搜索.参照petsoar的实现。
+ 	 
+ Date:2006-1-7
+     author:somebody
+     1.实现lucene搜索的实现，参照simpleoa的实现方法。终于搞定了。呵呵。
+     
+ Date:2006-1-10
+ 	 author:somebody
+ 	 1.添加了两个页面，一个首页一个后台管理页面，自己不会美工，都是用的wordpress的。
+ Date:2006-1-12
+ 	 author:somebody
+ 	 1.修改index.action，叶面基本上可以正常显示了。
+ 	 2.昨天在发布的时候出现了些问题，就是发现如果建立mysql数据库的时候用的utf-8编码,
+ 	 会出现primary key to long的错误,所以如果部署到mysql建立数据库还是采用gbk,
+ 	 连接字符串那个character也改成gbk就ok了。
+ Date:2006-1-13
+ 	 author:somebody
+ 	 1.修改FCKeditor的编码问题。
+ 	 2.webwork2.2正式发布,更新到2.2,xwork也必须更新。
+ 	 3.实现了category的Ajax操作.
+ Date:2006-1-14
+ 	 author:somebody
+ 	 1.重新修改bulid.xml,修正发布错误。
+ Date:2006-1-15
+ 	 author:somebody
+ 	 1.添加action,修改一些bug,用ajax实现了.后台添加category.首页blog的分页实现。
+ Date:2006-1-16
+ 	 author:somebody
+ 	 1.修改initData的bug。
+ 	 2.修改FCKeditor的路径问题,fck要从根目录读起 ${req.contextPath}/FCKEditor.这样就可以了。
+ Date:2006-1-17 0:34
+ 	 author:somebody
+ 	 1.舔加详细阅读界面,以及首页面.
+ 	 2.bug fix,The mysql's primary key 问题,原来是因为hibernate默认的string类型长度是255
+ 	 用utf-8编码,255的string就超过长度了。
+ 	 3.增加comment的业务代码。以及postaction
+ Date:2006-2-10 11:17
+ 	 author:somebody
+ 	 1.将hibernate升级到3.1.2,启动好像没有什么问题，不知道还有没有数据库连接池的问题。
+ 	 2.修改配置数据库方式,现在直接修改config.properties就可以了。
+ Date:2006-2-13 11:10
+ 	 author:somebody
+ 	 1.将c3p0升级到0.9.04,现在不知道还有没有连接池的问题。
+ 	 2.修改webwork,spring新集成方式，webwork2.2改称了对spring的原生集成方式.
+ Date:2006-2-15 15:01
+ 	 author:somebody
+ 	 1.在javaeye上看到关于webwork2.2的配置。这个配置不错。加上了。webwork.devMode = true
+ Date:2006-2-23 10:43
+ 	 author:somebody
+ 	 1.修改认证码的bug,原来第一次登陆都不成功。是因为不能得到session的问题.request.getSession();报错了。
+ 	 Cannot create a session after the response has been committed.抛出这个异常。
+ Date:2006-3-12
+ 	 author:somebody
+ 	 1.重新修改文档。
+ Date:2006-3-16
+ 	 author:somebody
+ 	 1.添加code highlight功能.用的是jhighlight(uri:http://jhighlight.dev.java.net)
+ 	 写了个测试,还很好用.
+ Date:2006-3-21
+ 	 author:somebody
+ 	 1.把分类放入内存中加快读取速度。用interceptor实现。不过还不是很好。
+ Date:2006-3-26
+ 	 author:somebody
+ 	 1.基本实现了发布页面，准备去掉OpenSessionInView模式
+ 	 2.修改了inverse属性导致了collection属性不能得到，修改回来了
+ Date:2006-3-27
+ 	 author:somebody
+ 	 1.继续修改了一下页面。增加删除功能。 
+ 	 2.添加修改功能
+ 	 3.添加tag实现
+ Date:2006-3-28
+ 	 author:somebody
+ 	 1.修改tag的bug。
+ 	 2.修改build，达到我想要的效果了。呵呵，参考了springside的build文件
+ 	 3.修改FCKeditor配置，可以发送评论了。
+ Date:2006-3-29
+ 	 author:somebody
+ 	 1.添加recent comment
+ 	 2.升级webwork到2.2.2,xwork到1.1.3好像没有什么问题.
+ 	 3.增加分类浏览
+ Date:2006-3-30
+ 	 author:somebody
+ 	 1.添加rss.
+ 	 2.添加tag.
+ 	 3.想添加codehight
+ Date:2006-3-31
+ 	 author:somebody
+ 	 1.增加cookie支持。
+ Date:2006-4-6
+ 	 author:somebody
+ 	 1.增加oscache支持。
+ Date:2006-4-9
+ 	 author:somebody
+ 	 1.修改index.action页面通过w3c验证
+ 	 2.atom支持
+ Date:2006-4-14
+ 	 author:somebody
+ 	 1.读取blog,comment总数
+ 	 2.添加一些Ajax应用
+ Date:2006-4-22
+ 	 author:somebody
+ 	 1.添加embedTomcat，现在tomcat也不需要装了。呵呵。
+ Date:2006-4-26
+ 	 author:somebody
+ 	 1.仿照Gavin King的adminapp添加Role
+ Date:2006-4-28
+ 	 author:somebody
+ 	 1.不用opensessioninview真是不好做,还是还原了,还用它.
+ Date:2006-5-3
+ 	 author:somebody
+ 	 1.完成后台分类管理界面操作
+ Date:2006-5-7
+ 	 author:somebody
+ 	 1.加上sitemesh的支持
+ 	 2.添加guestbook
+ ......
+ ......
+ omit many many......
+ 
+ Date:2007-04-27
+     author:rory
+     1.添加compass支持
+ Date:2007-04-30
+     author:rory
+     1.修改category,tag的rewrite url,用name替代原来的id
+     /tag/5e3bfa9c11dfa2070111e62968530b5c.html => /tag/避免使用/
+     
+ Date:2007-05-21
+     author:rory
+     1.添加itheme主题。
+     2.将web-20-100里面的简化lightbox移出来作为公共使用。
+     3.添加搜索的分页支持。
+ Date:2007-05-25
+     author:rory
+     1.修正compass生成index文件的路径问题。
+ Date:2007-06-05
+     author:rory
+     1.修正itheme模版，通过w3c验证
+ Date:2007-06-07
+     author:rory
+     1.修改登录页面的login.ftl模版，去掉密码的显示
+ Date:2007-06-19
+     author:rory
+     1.修改评论发送Email的bug。
+     2.修改theme的配置到config.properties文件中。
+     3.发布1.0版本。
+ Date:2007-08-09
+     author:rory
+     1.好久没写changelog了，建了一个分支，重构原来的一些设计
+     2.重构comment，准备去掉trackback对象。给comment添加status.agent.
+ Date:2007-08-18
+     author:rory
+     1.修改了原来的发表日志，修改日志，添加草稿支持。
+     2.添加page的支持。
+ Date:2007-08-19
+     author:rory
+     1.修改feed的缓存问题，修改成摘要模式
+     2.发布七夕版
+ Date:2007-08-21
+     author:rory
+     1.修改发布评论后需要认证的bug
+     2.修改读取相关日志的时候把page也读出来了
+     3.修改分类，标签页面的分页url映射规则
+ Date:2007-08-28
+     author:rory
+     1.修改读取相关日志的bug,如果没有tag的话就会出错。
+     2.修改默认的theme,重构了一下,减少了很多重复的代码。
+     
+     ........
+     
+ Date:2007-10-06
+ 	 author:rory
+ 	 1.实现后台的记住登录
+ 	 2.发布中秋节版本1.6
+ 	 3.创建1.8分支
+ Date:2007-10-07
+     author:rory
+     1.分离后台管理,分离到单独的servlet中，映射到admin/*.jspx.
+     2.添加后台的theme设置,自由切换.
+     3.修正后台评论管理的bug.
+     4.重构baseController和原来的controller的配置
+ Date:2007-10-10
+     author:rory
+     1.添加metaWeblog xmlrpc api的支持。
+     2.测试blogmover.redv.com 的支持。
+ Date:2007-10-15
+     author:rory
+     1.添加tag统计支持。
+ Date:2007-10-20
+     author:rory
+     1.添加分类category的统计支持
+ Date:2007-10-27
+     author:rory
+     1.重构主题模板,去掉多余的部分
+     2.修改404和500错误页面,每个主题自己定义
+     3.修改build.xml将src打包到war包中
+     4.增加archive支持
+ Date:2007-10-28
+     author:rory
+     1.添加批量删除评论
+ Date:2007-10-30
+     author:rory
+     1.完成新主题underone's G7 v1
+     2.添加readme.txt,提供安装向导和升级向导
+ Date:2007-11-2
+     author:rory
+     1.修改部署到tomcat为单独的host的时候/admin无法访问的bug
+     2.修改feed的500错误
+ Date:2007-11-8
+     author:rory
+     1.修改查询关键字时跟上不存在页码的时候500错误
+     2.修改浏览entry的时候查询的是页面,由于页面没有分类信息,所以页面模板会出错
+     3.修改rss输出时还是截取内容部分。现在直接读取summary了。
+ Date:2007-11-10
+     author:rory
+     1.修改了opensessioninview的问题.

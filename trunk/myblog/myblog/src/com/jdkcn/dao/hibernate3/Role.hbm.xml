@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+	
+	<class name="Role" table="MYBLOG_ROLE">
+
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="name" unique="true"	not-null="true"	update="false" length="25"/>
+		<property name="description" length="150"/>
+		
+		<bag name="users" lazy="true" table="MYBLOG_USER_ROLE" inverse="true">
+			<!-- the foreign key of the Role -->
+			<key column="roleId"/>
+			<!-- the foreign key of the User -->
+			<many-to-many column="userId" class="User" outer-join="true"/>
+			<!-- Since Users are not cached, make sure
+				we use an outer join! -->
+		</bag>
+
+	</class>
+	
+
+	
+	<!-- A named HQL query. This uses a subquery, so it won't 
+		work on MySQL! -->
+		
+	<query name="unassignedRolesByUser.HQL"><![CDATA[
+		from Role role
+		where not :userId in ( select u.id from role.users u )
+		order by role.name desc
+	]]></query>
+	    
+	
+	<!-- For MySQL 4.0, which has no support for subselects, we 
+		need to use an ON-clause condition which is not provided 
+		by HQL. So we will use a named SQL query instead. -->
+		
+	<sql-query name="unassignedRolesByUser.MySQL">
+		<![CDATA[
+			select {R.*}
+			from role R
+				left join USER_ROLE UR
+					on UR.ROLE_ID = R.ROLE_ID and UR.USER_ID = :userId
+			where UR.USER_ROLE_ID is null
+			order by R.NAME desc
+		]]>
+		<return alias="R" class="Role"/>
+		<synchronize table="MYBLOG_USER_ROLE"/>
+	</sql-query>
+	
+	
+
+</hibernate-mapping>

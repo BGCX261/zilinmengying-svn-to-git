@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="location">
+                <value>classpath:config.properties</value>
+      </property>
+    </bean>
+    <!-- 
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass"><value>${datasource.driverClassName}</value></property>
+		<property name="jdbcUrl"><value>${datasource.url}</value></property>
+		<property name="properties">
+			<props>
+				<prop key="c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
+                <prop key="c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
+                <prop key="c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+                <prop key="c3p0.maxStatements">${hibernate.c3p0.max_statement}</prop>
+                <prop key="c3p0.testConnectionOnCheckout">true</prop>
+                <prop key="user">${datasource.username}</prop>
+                <prop key="password">${datasource.password}</prop>
+			</props>
+		</property>
+		<property name="initialPoolSize"><value>1</value></property>
+		<property name="maxPoolSize"><value>100</value></property>		
+	</bean>
+	
+	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="jdbc.fetch_size">50</prop>
+				<prop key="jdbc.batch_size">25</prop>		
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.query.substitutions">true 1,false 0</prop>
+			</props>
+        </property>
+    </bean>
+	 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass"><value>${datasource.driverClassName}</value></property>
+		<property name="jdbcUrl"><value>${datasource.url}</value></property>
+		<property name="user"><value>${datasource.username}</value></property>
+		<property name="password"><value>${datasource.password}</value></property>
+		<property name="initialPoolSize"><value>${hibernate.c3p0.initialPoolSize}</value></property>
+		<property name="minPoolSize"><value>${hibernate.c3p0.minPoolSize}</value></property>
+		<property name="maxPoolSize"><value>${hibernate.c3p0.maxPoolSize}</value></property>
+		<property name="maxIdleTime"><value>${hibernate.c3p0.timeout}</value></property>
+		<property name="maxStatements"><value>${hibernate.c3p0.max_statement}</value></property>
+		<property name="acquireIncrement"><value>${hibernate.c3p0.acquireIncrement}</value></property>
+	</bean>
+
+	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="jdbc.fetch_size">50</prop>
+				<prop key="jdbc.batch_size">25</prop>		
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.query.substitutions">true 1,false 0</prop>
+			</props>
+        </property>
+    </bean>
+    
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean" >
+		<property name="dataSource">
+			<ref local="dataSource"/>
+		</property>
+		<property name="hibernateProperties">
+			<ref local="hibernateProperties"/>
+		</property>
+		<!-- 
+		<property name="mappingJarLocations">
+			<list>
+				<value>WEB-INF/lib/${hibernate.mappingjar.framework}</value>
+				<value>WEB-INF/lib/${hibernate.mappingjar.passport}</value>
+				<value>WEB-INF/lib/${hibernate.mappingjar.info}</value>
+			</list>
+		</property>
+		 -->
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/jdkcn/dao/hibernate3</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory"/>
+		</property>
+	</bean>
+
+	<bean id="baseTxProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+		<property name="transactionManager">
+			<ref local="transactionManager"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="blogFacade" parent="baseTxProxy">
+		<property name="target">
+			<bean class="com.jdkcn.BlogFacadeImpl">
+				<property name="mailService" ref="mailService"/>
+				<property name="categoryDao" ref="categoryDao" />
+				<property name="entryDao" ref="entryDao" />
+				<property name="commentDao" ref="commentDao" />
+				<property name="guestBookDao" ref="guestBookDao" />
+				<property name="tagDao" ref="tagDao" />
+				<property name="userDao" ref="userDao" />
+				<property name="roleDao" ref="roleDao" />
+				<property name="requestCounterDao" ref="requestCounterDao"/>
+                <property name="linkDao" ref="linkDao"/>
+                <property name="siteConfigDao" ref="siteConfigDao" />
+				<property name="configPath"><value>${config.path}</value></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="initDataManager" class="com.jdkcn.InitDataManager">
+		<property name="username"><value>${system.username}</value></property>
+		<property name="password"><value>${system.password}</value></property>
+		<property name="email"><value>${system.email}</value></property>
+        <property name="initialization"><value>${initialization}</value></property>
+		<property name="importFromPJblog"><value>${importFromPJblog}</value></property>
+		<property name="dataUrl"><value>jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};DBQ=E:/pjblog.mdb</value></property>
+		<property name="blogFacade" ref="blogFacade"/>
+	</bean>
+
+
+</beans>

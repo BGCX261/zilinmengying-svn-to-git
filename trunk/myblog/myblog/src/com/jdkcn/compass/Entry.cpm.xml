@@ -1,0 +1,28 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE compass-core-mapping PUBLIC
+    "-//Compass/Compass Core Mapping DTD 1.0//EN"
+    "http://www.opensymphony.com/compass/dtd/compass-core-mapping.dtd">
+
+<compass-core-mapping package="com.jdkcn.domain">
+	<class name="Entry" alias="entry">
+		<id name="id" />
+		<property name="title">
+			<meta-data>title</meta-data>
+		</property>
+		<property name="content">
+			<meta-data converter="htmlPropertyConverter">content</meta-data>
+		</property>
+        <property name="name">
+            <meta-data>name</meta-data>
+        </property>
+        <property name="entryStatus">
+        	<meta-data>entryStatus</meta-data>
+        </property>
+        <property name="type">
+        	<meta-data>type</meta-data>
+        </property>
+        <property name="postTime">
+            <meta-data format="yyyy-MM-dd">postTime</meta-data>
+        </property>
+	</class>
+</compass-core-mapping>

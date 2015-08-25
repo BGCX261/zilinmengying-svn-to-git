@@ -1,0 +1,29 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE compass-core-mapping PUBLIC
+    "-//Compass/Compass Core Mapping DTD 1.0//EN"
+    "http://www.opensymphony.com/compass/dtd/compass-core-mapping.dtd">
+
+<compass-core-mapping package="com.jdkcn.domain">
+	<class name="Comment" alias="comment">
+		<id name="id" />
+		<property name="authorMail">
+			<meta-data>authorMail</meta-data>
+		</property>
+        <property name="authorName">
+            <meta-data>authorName</meta-data>
+        </property>
+        <property name="authorSite">
+            <meta-data>authorSite</meta-data>
+        </property>
+        <property name="postIP">
+            <meta-data>postIP</meta-data>
+        </property>
+		<property name="content">
+			<meta-data converter="htmlPropertyConverter">content</meta-data>
+		</property>
+        <property name="postTime">
+            <meta-data format="yyy-MM-dd">postTime</meta-data>
+        </property>
+        <reference name="entry"/>
+	</class>
+</compass-core-mapping>

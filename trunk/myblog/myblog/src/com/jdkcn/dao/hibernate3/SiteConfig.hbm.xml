@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+    <class name="SiteConfig" table="MYBLOG_SITE_CONFIG" dynamic-update="true">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		<property name="siteName" type="string" length="255"/>
+		<property name="adSenseForSearch" type="string" length="2048"/>
+		<property name="analyticsCode" type="string" length="2048"/>
+		<property name="ICPNumber" type="string" length="255"/>
+		<property name="imageAds" type="string" length="2048"/>
+		<property name="limitLength"/>
+		<property name="linkUnitsAds" type="string" length="2048"/>
+		<property name="referralsAds" type="string" length="2048"/>
+		<property name="siteAbout" type="text"/>
+		<property name="siteSimpleAbout" type="string" length="2048"/>
+		<property name="siteSubName" type="string" length="255"/>
+		<property name="siteURL" type="string" length="255"/>
+		<property name="textAds" type="string" length="2048"/>
+		<property name="theme" type="string" length="30"/>
+		<property name="videoAds" type="string" length="2048"/>
+    </class>
+    
+</hibernate-mapping>

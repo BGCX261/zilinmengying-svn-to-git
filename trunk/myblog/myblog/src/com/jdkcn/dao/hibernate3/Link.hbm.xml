@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+	<class name="Link" table="MYBLOG_LINK" dynamic-update="true">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+        <property name="name" type="string" length="40" not-null="true"/>
+        <property name="URL" type="string" length="100" not-null="true"/>
+        <property name="description" type="string" length="200"/>
+        <property name="imgURL" type="string" length="200"/>
+        <property name="createTime" type="timestamp" not-null="true"/>
+        <property name="order" column="linkOrder" type="integer"/>
+        <property name="recommend" type="boolean"/>
+		<many-to-one name="category" class="com.jdkcn.domain.Category"
+			cascade="none" outer-join="auto" column="categoryId"/>
+	</class>
+    
+</hibernate-mapping>

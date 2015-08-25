@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.jdkcn.domain">
+
+	<class name="Entry" table="MYBLOG_ENTRY" dynamic-update="true">
+		<id name="id" unsaved-value="null" type="java.lang.String" length="32">
+			<generator class="uuid"/>
+		</id>
+		<many-to-one name="author" class="User" not-null="true" />
+		<property name="comeFrom" type="string" length="100"/>
+		<property name="comeFromURL" type="string" length="300"/>
+		<property name="content" type="text" not-null="true"/>
+		<property name="modifyTime" type="timestamp"/>
+		<property name="postTime" type="timestamp"/>
+		<property name="postIP" type="string" not-null="true" length="15" />
+		<property name="title" type="string" not-null="true" length="500" />
+        <property name="summary" type="string" length="2048"/>
+		<property name="hits" type="integer" />
+		<property name="commentSize" type="integer"/>
+		<property name="trackbackSize" type="integer"/>
+		<property name="name" type="string" length="100"/>
+		<property name="entryStatus" type="string" length="20"/>
+		<property name="commentStatus" type="string" length="20"/>
+		<property name="type" type="string" length="20"/>
+		<set name="categories" table="MYBLOG_ENTRY_CATEGORY" lazy="true" cascade="none">
+			<key column="entryId"/>
+			<many-to-many column="categoryId" class="Category"/>
+		</set>
+		
+		<property name="quotes" column="quotes" type="com.jdkcn.util.StringListType" lazy="true" length="1000"/>
+		
+		<set name="tags" lazy="true" table="MYBLOG_ENTRY_TAGS" cascade="none">
+			<key column="entryId" />
+			<many-to-many column="tagId" class="Tag" />
+		</set>
+	</class>
+	<!-- 
+    <query name="find.by.category">
+		<![CDATA[
+			from Blog as b 
+			where :category = some elements(b.categories)
+			]]>
+	</query>
+	
+	<query name="find.blog.by.title">
+		<![CDATA[
+			from Blog as b
+			where b.title = :title
+		]]>
+	</query>
+	 -->
+</hibernate-mapping>

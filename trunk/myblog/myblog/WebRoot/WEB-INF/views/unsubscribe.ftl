@@ -1,0 +1,1 @@
+<#include siteConfig.theme + "/unsubscribe.ftl"/>

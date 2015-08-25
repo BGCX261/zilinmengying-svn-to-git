@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<bean id="metaWeblogAPIHandler" class="com.jdkcn.xmlrpc.MetaWeblogAPIHandler">
+		<property name="blogFacade" ref="blogFacade"/>
+	</bean>
+
+	<bean id="requestProcessorFactory"
+		class="com.jdkcn.xmlrpc.ConfiguredBeanProcessorFactory">
+		<property name="classBeanMap">
+			<map>
+				<entry key="com.jdkcn.xmlrpc.MetaWeblogAPIHandler" value-ref="metaWeblogAPIHandler" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="xmlRpcHandler"
+		class="com.jdkcn.xmlrpc.XmlRpcServerController">
+		<property name="factory"><ref local="requestProcessorFactory"/></property>
+		<property name="mappings">
+			<props>
+				<prop key="metaWeblog">com.jdkcn.xmlrpc.MetaWeblogAPIHandler</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<siteConfig>
+  <siteURL>http://localhost:8080</siteURL>
+  <siteName>My Blog</siteName>
+  <siteSubName>Just another myblog</siteSubName>
+  <siteAbout>A simple java blog, use spring,hibernate,freemarker.</siteAbout>
+  <siteSimpleAbout>莫多泡泡,Java,Hibernate,Struts,Spring,Webwork,Linux,Unix,Freebsd,ajax,jdkcn.com,专注Java技术,Java开源项目,分享Java心得和经验.</siteSimpleAbout>
+  <linkUnitsAds></linkUnitsAds>
+  <imageAds></imageAds>
+  <videoAds></videoAds>
+  <textAds></textAds>
+  <referralsAds></referralsAds>
+  <adSenseForSearch></adSenseForSearch>
+  <limitLength>500</limitLength>
+</siteConfig>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
+    "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
+
+<!-- https://urlrewrite.dev.java.net/manual/3.0 -->
+<urlrewrite use-query-string="true">
+    <rule>
+    	<from>^/index/([0-9]+).html$</from>
+    	<to type="forward">/index.jhtml?p=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/([0-9]+).html$</from>
+    	<to type="forward">/index.jhtml?p=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/entry/([0-9_a-z-]+).html$</from>
+    	<to type="forward">/entry.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/entry/([0-9_a-z-]+).jhtml$</from>
+    	<to type="forward">/entry.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/entry/id/([0-9a-z]+).html$</from>
+    	<to type="forward">/entry.jhtml?id=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/category/([0-9a-z]+).html$</from>
+    	<to type="forward">/category.jhtml?id=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/category/([0-9a-z]+)-([0-9]+).html$</from>
+    	<to type="forward">/category.jhtml?id=$1&amp;p=$2</to>
+    </rule>
+	
+	<rule>
+    	<from>^/category/([^/]+)/page/([0-9]+)$</from>
+    	<to type="forward">/category.jhtml?name=$1&amp;p=$2</to>
+    </rule>
+	
+	<rule>
+    	<from>^/category/([^/]+)/page/([0-9]+)/$</from>
+    	<to type="forward">/category.jhtml?name=$1&amp;p=$2</to>
+    </rule>
+    
+    <rule>
+    	<from>^/tag/([0-9a-z]+).html$</from>
+    	<to type="forward">/tag.jhtml?id=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/tag/([0-9a-z]+)-([0-9]+).html$</from>
+    	<to type="forward">/tag.jhtml?id=$1&amp;p=$2</to>
+    </rule>
+    
+    <rule>
+    	<from>^/tag/([^/]+)/page/([0-9]+)$</from>
+    	<to type="forward">/tag.jhtml?name=$1&amp;p=$2</to>
+    </rule>
+	
+	<rule>
+    	<from>^/tag/([^/]+)/page/([0-9]+)/$</from>
+    	<to type="forward">/tag.jhtml?name=$1&amp;p=$2</to>
+    </rule>
+    
+    <rule>
+    	<from>^/feed/rss2$|^/feed/rss2/$</from>
+    	<to type="forward">/feed</to>
+    </rule>
+    
+    <rule>
+    	<from>^/feed/atom$|^/feed/atom/$</from>
+    	<to type="forward">/feed?type=atom_0.3</to>
+    </rule>
+    
+    <rule>
+    	<from>^/tags.html$</from>
+    	<to type="forward">/tags.jhtml</to>
+    </rule>
+    
+    <rule>
+        <from>^/links.html$</from>
+        <to type="forward">/links.jhtml</to>
+    </rule>
+    
+    <rule>
+        <from>^/search.html</from>
+        <to type="forward">/search.jhtml</to>
+    </rule>
+    
+    <rule>
+        <from>^/search/([^/]+)/$</from>
+        <to type="forward">/search.jhtml?query=$1</to>
+    </rule>
+    
+    <rule>
+        <from>^/search/([^/]+)</from>
+        <to type="forward">/search.jhtml?query=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/admin($|\/$)</from>
+    	<to type="redirect">%{context-path}/admin/index.jspx</to>
+    </rule>
+    
+    <rule>
+        <from>^/tag/([^/]+)/$</from>
+        <to type="forward">/tag.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+        <from>^/tag/([^/]+)$</from>
+        <to type="forward">/tag.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+        <from>^/category/([^/]+)/$</from>
+        <to type="forward">/category.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+        <from>^/category/([^/]+)$</from>
+        <to type="forward">/category.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/page/([0-9_a-z-]+).html$</from>
+    	<to type="forward">/page.jhtml?name=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/archive/([0-9]+)($|\/$)</from>
+    	<to type="forward">/archive.jhtml?m=$1</to>
+    </rule>
+    
+    <rule>
+    	<from>^/archive/([0-9]+)/page/([0-9]+)($|\/$)</from>
+    	<to type="forward">/archive.jhtml?m=$1&amp;p=$2</to>
+    </rule>
+    
+    <rule>
+    	<from>^/login.jhtml</from>
+    	<to type="redirect">%{context-path}/admin/login.jspx</to>
+    </rule>
+    
+    <rule>
+    	<from>^/xmlrpc</from>
+    	<to type="forward">/metaWeblogXmlrpc.jhtml</to>
+    </rule>
+    
+    <rule>
+    	<from>^/xmlrpc/</from>
+    	<to type="forward">/metaWeblogXmlrpc.jhtml</to>
+    </rule>
+    
+    <!-- This for my blog's old url(from pjblog) -->
+    <rule>
+    	<from>^/default.asp$</from>
+    	<to type="redirect">%{context-path}/index</to>
+    </rule>
+    
+    <rule>
+    	<from>^/article.asp\?id=([0-9]+)$</from>
+    	<to type="redirect">%{context-path}/entry/$1.html</to>
+    </rule>
+    
+    <rule>
+    	<from>^/default.asp\?id=([0-9]+)$</from>
+    	<to type="redirect">%{context-path}/entry/$1.html</to>
+    </rule>
+    
+    <rule>
+    	<from>^/atom.asp(.*)$</from>
+    	<to type="redirect">%{context-path}/feed/atom/</to>
+    </rule>
+    
+    <rule>
+    	<from>^/feed.asp(.*)$</from>
+    	<to type="redirect">%{context-path}/feed/rss2</to>
+    </rule>
+    
+    <rule>
+    	<from>^/tag.asp$</from>
+    	<to type="redirect">%{context-path}/tags.html</to>
+    </rule>
+    
+    <rule>
+    	<from>^/default.asp\?tag=([^/.]+)$</from>
+    	<to type="redirect">%{context-path}/tags.html</to>
+    </rule>
+    
+    <rule>
+        <from>^/trackback.asp\?tbID=([0-9]+)$</from>
+        <to type="redirect">%{context-path}/entry/$1.html</to>
+    </rule>
+    <!-- 
+    <rule>
+    	<from>^/default.asp\?cateID=5$</from>
+    	<to type="redirect">/category/402880000f71cbc6010f71cbdca90063.html</to>
+    </rule>
+     -->
+     <rule>
+     	<from>^/LoadMod.asp\?plugins=AboutMeForPJBlog$</from>
+     	<to type="redirect">%{context-path}/about.html</to>
+     </rule>
+</urlrewrite>
+

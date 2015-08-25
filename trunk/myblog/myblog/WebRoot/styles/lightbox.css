@@ -1,0 +1,45 @@
+/* =LIGHTBOX (http://www.huddletogether.com/projects/lightbox/)
+======================================================== */
+
+#lightbox {
+	background-color: #eee;
+	padding: 10px;
+	}
+#lightboxDetails {
+	font-size: 1em;
+	padding-top: 0.4em;
+	}	
+#lightboxCaption {
+	float: left;
+	}
+#keyboardMsg {
+	float: right;
+	}
+#closeButton {
+	top: 5px;
+	right: 5px;
+	}
+
+#lightbox img {
+	border: 0 solid;
+	clear: both;
+	}
+#overlay img {
+	border: 0 solid;
+	}
+
+#overlay {
+	background-image: url(../img/overlay.png);
+	}
+
+* html #overlay {
+	background-color: #333;
+	back\ground-color: transparent;
+	background-image: url(blank.gif);
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/overlay.png", sizingMethod="scale");
+	}
+
+#loadingImage {
+	background: #000;
+	padding: 5em;
+	}
